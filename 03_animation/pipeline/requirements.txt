@@ -1,0 +1,10 @@
+# Versioni usate per il mix consegnato il 27/09/2026 (con queste il mix esce identico bit per bit).
+# Se l'installazione fallisce su un Python diverso, si possono allentare i vincoli (==  ->  >=).
+numpy==2.4.4
+scipy==1.17.1
+soundfile==0.14.0
+pyloudnorm==0.2.0
+numba==0.67.0
+librosa==0.11.0
+soxr==1.1.0
+Pillow==12.2.0

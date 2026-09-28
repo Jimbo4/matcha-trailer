@@ -1,0 +1,42 @@
+# Repo della cartella "trailer". Da tenere PRIVATA (musica Mixkit e materiali del brand).
+
+# --- Segreti: mai in git ---
+_keys.env
+*.env
+!_keys.env.example
+
+# --- Runner API sul PC: code, ricevute, log ---
+tools/queue/
+tools/running/
+tools/done/
+tools/heartbeat.txt
+tools/runner.log
+tools/STOP
+
+# --- Dump grezzi delle chiamate API (pesanti; l'audio in base64 contiene stringhe che GitHub scambia per chiavi) ---
+02_assets/_raw/
+
+# --- File generati: si rigenerano con 03_animation/pipeline/build.sh ---
+03_animation/pipeline/node_modules/
+03_animation/pipeline/out/
+03_animation/pipeline/audio/out/
+03_animation/pipeline/images/out/
+__pycache__/
+*.pyc
+.cache/
+_da_eliminare/
+
+# --- Bozze superate ---
+04_render/*bozza*
+
+# --- Brani candidati non usati (circa 80 MB): restano sul PC, nella repo solo il brano del trailer.
+#     Per includerli tutti, commenta le due righe seguenti.
+02_assets/music/candidates/*
+!02_assets/music/candidates/me_and_you_851.mp3
+
+# --- Sistema ---
+.DS_Store
+Thumbs.db
+desktop.ini
+*.tmp
+~$*

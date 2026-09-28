@@ -1,0 +1,15 @@
+{
+  "name": "matcha-trailer-pipeline",
+  "private": true,
+  "description": "Render deterministico del trailer Matcha (Playwright + ffmpeg)",
+  "type": "module",
+  "scripts": {
+    "render": "node render.mjs",
+    "draft": "node render.mjs --draft 1",
+    "shot": "node shot.mjs"
+  },
+  "dependencies": {
+    "playwright-core": "1.63.0",
+    "pngjs": "7.0.0"
+  }
+}
