@@ -26,8 +26,9 @@ __pycache__/
 .cache/
 _da_eliminare/
 
-# --- Bozze superate ---
+# --- Bozze e versioni superate (la v6 resta nella storia git) ---
 04_render/*bozza*
+04_render/_v6/
 
 # --- Brani candidati non usati (circa 80 MB): restano sul PC, nella repo solo il brano del trailer.
 #     Per includerli tutti, commenta le due righe seguenti.

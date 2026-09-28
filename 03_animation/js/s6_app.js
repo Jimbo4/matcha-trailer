@@ -27,7 +27,10 @@
   const screen = el("div", { cls: "screen" }, phone);
   el("div", { cls: "island" }, screen);
   el("div", { cls: "glare" }, screen);
-  const app = el("div", { cls: "app", style: { transform: `scale(${570 / 393})` } }, screen);
+  el("div", { cls: "rim" }, phone);
+  // cover the whole screen (the old 570/393 scale left 3.5 px of screen background uncovered at the bottom)
+  const APP_S = 1232 / 847;
+  const app = el("div", { cls: "app", style: { left: ((570 - 393 * APP_S) / 2).toFixed(3) + "px", transform: `scale(${APP_S})` } }, screen);
   tl.fromTo(phone, { y: 1100, rotateX: 38, rotateZ: -9, scale: 1.0 }, { y: 0, rotateX: 0, rotateZ: -2.5, scale: 1.1, duration: 0.95, ease: "expo.out" }, t0 + 0.02);
   tl.to(phone, { scale: 1.2, rotateZ: -1.2, duration: 3.1, ease: "sine.inOut" }, t0 + 0.97);
   procs.push((t) => { if (t >= t0 && t < t1) phone.style.translate = `0 ${(Math.sin((t - t0) * 1.7) * 7).toFixed(2)}px`; });
@@ -162,6 +165,14 @@
   tl.to(s2, { xPercent: 0, duration: 0.45, ease: "expo.inOut" }, 16.85);
   tl.to(s2, { xPercent: -30, duration: 0.45, ease: "expo.inOut" }, 18.62);
   tl.to(s3, { xPercent: 0, duration: 0.45, ease: "expo.inOut" }, 18.62);
+  // screens waiting off-screen (xPercent 100) or fully covered (-30) are hidden: the rotated rounded clip let
+  // a 1 px sliver of the white waiting screen through at the right edge (white line flickering at ~16 s)
+  procs.push((t) => {
+    for (const sc of [s1, s2, s3]) {
+      const xp = gsap.getProperty(sc, "xPercent");
+      sc.style.visibility = xp >= 99.5 || xp <= -29.5 ? "hidden" : "visible";
+    }
+  });
   tl.fromTo(vav, { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(2)" }, 18.9);
   tl.fromTo(vcd, { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "expo.out" }, 18.98);
   tl.fromTo(vven, { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "expo.out" }, 19.08);

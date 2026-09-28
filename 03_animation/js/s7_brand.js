@@ -80,8 +80,10 @@
   tl.fromTo(pill, { xPercent: -50, scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.65, ease: "back.out(1.8)" }, tCTA + 0.4);
   // store badges
   const lbl = el("div", { cls: "abs body", text: "Disponibile ora su", style: { left: 0, width: "1080px", top: "1172px", textAlign: "center", fontSize: "30px", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "#222222", opacity: 0.8 } }, C8);
-  const bA = el("img", { attrs: { src: "assets/svg/apple-store.svg" }, style: { position: "absolute", left: "152px", top: "1236px", height: "110px" } }, C8);
-  const bG = el("img", { attrs: { src: "assets/svg/google-play-badge.svg" }, style: { position: "absolute", left: "509px", top: "1229px", height: "124px" } }, C8);
+  // same height for both badges (the Apple one was 110 px vs 124 px); pair centred, 28 px gap
+  const BH = 118, wA = BH * 119.66407 / 40, wG = BH * 238.96 / 70.87, gap = 28, bx = (1080 - wA - gap - wG) / 2, by = 1291 - BH / 2;
+  const bA = el("img", { attrs: { src: "assets/svg/apple-store.svg" }, style: { position: "absolute", left: bx.toFixed(1) + "px", top: by + "px", width: wA.toFixed(1) + "px", height: BH + "px" } }, C8);
+  const bG = el("img", { attrs: { src: "assets/svg/google-play-badge.svg" }, style: { position: "absolute", left: (bx + wA + gap).toFixed(1) + "px", top: by + "px", width: wG.toFixed(1) + "px", height: BH + "px" } }, C8);
   tl.fromTo(lbl, { opacity: 0, y: 16 }, { opacity: 0.8, y: 0, duration: 0.5, ease: "power3.out" }, 25.9);
   tl.fromTo(bA, { scale: 0.5, opacity: 0, y: 30 }, { scale: 1, opacity: 1, y: 0, duration: 0.55, ease: "back.out(2)" }, 26.22);
   tl.fromTo(bG, { scale: 0.5, opacity: 0, y: 30 }, { scale: 1, opacity: 1, y: 0, duration: 0.55, ease: "back.out(2)" }, 26.38);

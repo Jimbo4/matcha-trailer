@@ -95,17 +95,33 @@
     });
     // warm vignette
     el("div", { cls: "abs", style: { inset: 0, background: "radial-gradient(90% 60% at 50% 55%, rgba(255,170,90,0.10) 0%, rgba(0,0,0,0.45) 100%)" } }, S);
-    // photo card (cinematic, borderless with soft rounded corners)
-    const pw = 1000, ph = Math.round(848 * pw / 1264);
-    const card = el("div", { cls: "abs", style: { left: (540 - pw / 2) + "px", top: "760px", width: pw + "px", height: ph + "px", borderRadius: "34px", overflow: "hidden",
-      boxShadow: "0 40px 90px rgba(0,0,0,0.55)", border: "10px solid #FFFAFA" } }, S);
-    const photo = el("img", { attrs: { src: "assets/img/toast_photo.jpg" }, style: { position: "absolute", left: 0, top: 0, width: "100%", height: "100%", objectFit: "cover", transformOrigin: "50% 55%" } }, card);
-    tl.fromTo(card, { y: 420, scale: 0.9, rotate: 3.5, opacity: 1 }, { y: 0, scale: 1, rotate: 0, opacity: 1, duration: 0.9, ease: "expo.out" }, t0 + 0.08);
-    tl.fromTo(photo, { scale: 1.0 }, { scale: 1.12, duration: 3.9, ease: "sine.inOut" }, t0);
-    // candle glow flicker (candle at ~ (637, 450) in the 1264x848 source)
-    const cx = 637 * pw / 1264, cy = 452 * ph / 848;
-    const glow = el("div", { cls: "abs", style: { left: (cx - 170) + "px", top: (cy - 170) + "px", width: "340px", height: "340px", borderRadius: "50%",
-      background: "radial-gradient(circle, rgba(255,196,110,0.55) 0%, rgba(255,160,70,0.18) 38%, rgba(255,140,60,0) 70%)", mixBlendMode: "screen" } }, card);
+    // a stack of polaroids from different dates (same style as S4), the last one is the candlelit toast
+    const PW = 740, PIMG = PW - 44, PH = PIMG + 44 + 100;
+    const pols = [
+      { src: "assets/img/date_spritz.jpg", pos: "50% 42%", cap: "giovedì, 19:30 · Isola", x: -70, y: -40, rot: -8, t: t0 + 0.08 },
+      { src: "assets/img/date_bar.jpg", pos: "58% 45%", cap: "venerdì, 21:00 · Navigli", x: 80, y: 10, rot: 7, t: t0 + 0.70 },
+      { src: "assets/img/toast_photo.jpg", pos: "50% 50%", cap: "domenica, 20:30 · Brera", x: 0, y: 40, rot: -2.5, t: t0 + 1.32, last: true },
+    ];
+    const stackTop = 690;
+    let photo = null, card = null;
+    pols.forEach((o, i) => {
+      const c = el("div", { cls: "photo-card", style: { left: (540 - PW / 2) + "px", top: stackTop + "px", width: PW + "px", height: PH + "px", padding: "22px 22px 100px", borderRadius: "10px", zIndex: 2 + i } }, S);
+      const win = el("div", { cls: "abs", style: { left: "22px", top: "22px", width: PIMG + "px", height: PIMG + "px", overflow: "hidden", borderRadius: "4px" } }, c);
+      const im = el("img", { attrs: { src: o.src }, style: { position: "absolute", left: 0, top: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: o.pos, transformOrigin: "50% 55%" } }, win);
+      el("div", { cls: "abs body", text: o.cap, style: { left: "30px", bottom: "30px", fontSize: "32px", fontWeight: 600, color: "#5C4A3C", letterSpacing: "0.01em" } }, c);
+      tl.fromTo(c, { x: o.x * 0.4, y: 1350, rotate: o.rot + (i % 2 ? -10 : 10), scale: 0.94 }, { x: o.x, y: o.y, rotate: o.rot, scale: 1, duration: 0.75, ease: "expo.out" }, o.t);
+      // earlier cards settle back a touch when the next one lands
+      if (!o.last) tl.to(c, { scale: 0.96, duration: 0.6, ease: "power2.out" }, pols[i + 1].t + 0.1);
+      if (o.last) { photo = im; card = c; }
+      else tl.fromTo(im, { scale: 1.0 }, { scale: 1.06, duration: 2.0, ease: "sine.out" }, o.t);
+    });
+    tl.to(card, { rotate: -1, scale: 1.03, duration: 2.2, ease: "sine.inOut" }, pols[2].t + 0.75);
+    tl.fromTo(photo, { scale: 1.0 }, { scale: 1.1, duration: 2.6, ease: "sine.inOut" }, pols[2].t);
+    // candle glow flicker (candle at ~ (637, 452) in the 1264x848 source, square cover crop)
+    const sc = PIMG / 848, offX = (1264 * sc - PIMG) / 2;
+    const cx = 637 * sc - offX, cy = 452 * sc;
+    const glow = el("div", { cls: "abs", style: { left: (cx - 150) + "px", top: (cy - 150) + "px", width: "300px", height: "300px", borderRadius: "50%",
+      background: "radial-gradient(circle, rgba(255,196,110,0.55) 0%, rgba(255,160,70,0.18) 38%, rgba(255,140,60,0) 70%)", mixBlendMode: "screen" } }, photo.parentNode);
     procs.push((t) => {
       if (t < t0 || t > t1) return;
       const f = 0.72 + 0.14 * Math.sin(t * 13.1) + 0.09 * Math.sin(t * 31.7 + 1.3) + 0.05 * Math.sin(t * 57.3);
@@ -114,7 +130,7 @@
     const H = textBlock(S, ["In uno sguardo", "<span style='font-size:0.6em'>che dice:</span>"], { left: "80px", top: "250px", fontSize: "132px", color: "#FFFAFA" });
     revealLines(H.inners, t0 + 0.22, 0.16, 0.65);
     // the only chat bubble that matters: spoken, in real life
-    const bub = el("div", { cls: "abs display", html: "Restiamo ancora<br>un po'?", style: { left: "540px", top: "1010px", padding: "34px 52px 40px", background: "#FFFAFA", color: "#222222", borderRadius: "56px",
+    const bub = el("div", { cls: "abs display", html: "Restiamo ancora<br>un po'?", style: { left: "540px", top: "1000px", zIndex: 10, padding: "34px 52px 40px", background: "#FFFAFA", color: "#222222", borderRadius: "56px",
       fontSize: "78px", lineHeight: "0.98", textAlign: "center", boxShadow: "0 24px 60px rgba(0,0,0,0.35)", transformOrigin: "50% 100%", whiteSpace: "nowrap" } }, S);
     const tail = el("div", { cls: "abs", style: { left: "50%", bottom: "-26px", width: "56px", height: "56px", marginLeft: "-28px", background: "#FFFAFA", borderRadius: "6px", transform: "rotate(45deg)" } }, bub);
     tl.fromTo(bub, { xPercent: -50, yPercent: -100, scale: 0, rotate: -6 }, { scale: 1, rotate: -2, duration: 0.6, ease: "back.out(2.2)" }, 13.45);
@@ -123,6 +139,7 @@
       flower(S, { x: 890, y: 1180, R: 40, shape: "scallop", color: "#71F0AB" }),
       flower(S, { x: 860, y: 1420, R: 30, shape: "clover", color: "#FFD36E" }),
     ];
+    hearts.forEach((f) => { f.style.zIndex = 11; });
     hearts.forEach((f, i) => tl.fromTo(f, { scale: 0, rotate: -50 }, { scale: 1, rotate: 0, duration: 0.5, ease: "back.out(2)" }, 13.6 + i * 0.07));
     tl.to(S, { yPercent: -100, duration: 0.5, ease: "expo.out" }, 14.98);
     window.M.S5 = { S };

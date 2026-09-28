@@ -63,14 +63,33 @@
   tl.fromTo(typing, { opacity: 0, scale: 0.6, transformOrigin: "0% 100%" }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)" }, 3.2);
   tl.to(typing, { opacity: 0, scale: 0.7, duration: 0.25, ease: "power2.in" }, 4.25); // ...and nothing arrives
 
-  // ---------- the protagonist (halftone cutout): smile -> cringe ----------
-  const womanWrap = el("div", { cls: "abs", style: { left: "70px", top: "1085px", width: "1075px", height: "903px", transformOrigin: "60% 100%", scale: "0.93" } }, S);
-  const wSmile = el("img", { attrs: { src: "assets/img/woman_phone_smile.png" }, style: { position: "absolute", left: 0, top: 0, width: "1075px", height: "903px" } }, womanWrap);
-  const wCringe = el("img", { attrs: { src: "assets/img/woman_phone_cringe_aligned.png" }, style: { position: "absolute", left: 0, top: 0, width: "1075px", height: "903px", opacity: 0 } }, womanWrap);
-  tl.fromTo(womanWrap, { y: 60, scale: 0.97 }, { y: 0, scale: 1, duration: 1.2, ease: "power3.out" }, 0.0);
-  tl.to(wCringe, { opacity: 1, duration: 0.06 }, 3.46);
-  tl.to(wSmile, { opacity: 0, duration: 0.06 }, 3.48);
-  tl.fromTo(womanWrap, { rotate: 0 }, { keyframes: [{ rotate: -1.6, duration: 0.07 }, { rotate: 1.2, duration: 0.08 }, { rotate: -0.6, duration: 0.08 }, { rotate: 0, duration: 0.1 }], ease: "none", immediateRender: false }, 3.46);
+  // ---------- the protagonist: a big emoji, 🤔 -> 😱 (Fluent Color, MIT) ----------
+  // bottom-right, kept above the Reels safe zone (bottom 320 px, right 150 px)
+  const EMO = 520, emoX = 640, emoY = 1330;
+  const emoWrap = el("div", { cls: "abs", style: { left: (emoX - EMO / 2) + "px", top: (emoY - EMO / 2) + "px", width: EMO + "px", height: EMO + "px", transformOrigin: "50% 80%" } }, S);
+  const emoInner = el("div", { cls: "abs", style: { inset: 0, transformOrigin: "50% 80%" } }, emoWrap);
+  const emoStyle = { position: "absolute", left: 0, top: 0, width: EMO + "px", height: EMO + "px", filter: "drop-shadow(0 26px 34px rgba(0,0,0,0.38))" };
+  const eThink = el("img", { attrs: { src: "assets/emoji/thinking_face_color.svg" }, style: emoStyle }, emoInner);
+  const eScream = el("img", { attrs: { src: "assets/emoji/face_screaming_in_fear_color.svg" }, style: Object.assign({}, emoStyle, { opacity: 0 }) }, emoInner);
+  const womanWrap = emoWrap; // kept name: faded out on the drop below
+  tl.fromTo(emoWrap, { y: 70, scale: 0.9 }, { y: 0, scale: 1, duration: 1.2, ease: "power3.out" }, 0.0);
+  // the swap lands on the ignored "Visualizzato" / "Romantico, eh?"
+  tl.set(eScream, { opacity: 1 }, 3.46);
+  tl.set(eThink, { opacity: 0 }, 3.47);
+  tl.fromTo(emoWrap, { scale: 1 }, { keyframes: [{ scale: 1.2, duration: 0.07, ease: "power2.out" }, { scale: 1, duration: 0.45, ease: "elastic.out(1,0.4)" }], immediateRender: false }, 3.46);
+  tl.fromTo(emoWrap, { rotate: 0 }, { keyframes: [{ rotate: -7, duration: 0.06 }, { rotate: 6, duration: 0.07 }, { rotate: -3, duration: 0.08 }, { rotate: 0, duration: 0.1 }], ease: "none", immediateRender: false }, 3.46);
+  // idle life: 🤔 ponders (slow tilt + bob); 😱 trembles, harder as the drop nears
+  procs.push((t) => {
+    if (t > t1) return;
+    if (t < 3.46) {
+      emoInner.style.rotate = (Math.sin(t * 2.1) * 4).toFixed(2) + "deg";
+      emoInner.style.translate = `0px ${(Math.sin(t * 2.1 + 1.2) * 6).toFixed(2)}px`;
+    } else {
+      const k = 0.35 + 0.65 * smooth(4.55, T.DROP, t);
+      emoInner.style.rotate = (Math.sin(t * 47) * 1.6 * k).toFixed(2) + "deg";
+      emoInner.style.translate = `${(Math.sin(t * 59 + 0.7) * 5 * k).toFixed(2)}px ${(Math.cos(t * 43) * 4 * k).toFixed(2)}px`;
+    }
+  });
 
   // ---------- headline copy ----------
   const A = textBlock(S, ["<span style='color:#71F0AB'>3</span> settimane", "di chat."], { left: "80px", top: "250px", fontSize: "124px", color: "#FFFAFA" });
@@ -84,13 +103,31 @@
   const C = textBlock(S, ["Romantico,", "eh?"], { left: "80px", top: "250px", fontSize: "134px", color: "#FFFAFA" });
   revealLines(C.inners, 3.52, 0.2, 0.55, "back.out(1.6)");
 
-  // ---------- the ghost ----------
-  const ghost = el("img", { attrs: { src: "assets/img/ghost.png" }, cls: "sticker", style: { left: "70px", top: "590px", width: "205px", height: "556px", transformOrigin: "50% 60%" } }, S);
-  tl.fromTo(ghost, { x: -420, rotate: -18, opacity: 1 }, { x: 0, rotate: 5, duration: 0.7, ease: "back.out(1.3)" }, 3.42);
+  // ---------- the ghost: 👻 flutters in a wide figure-eight over the chat (never over the title) ----------
+  const GH = 230;
+  const ghost = el("div", { cls: "abs", style: { left: 0, top: 0, width: GH + "px", height: GH + "px", zIndex: 6, visibility: "hidden" } }, S);
+  const ghImg = el("img", { attrs: { src: "assets/emoji/ghost_color.svg" }, style: { position: "absolute", left: 0, top: 0, width: GH + "px", height: GH + "px", filter: "drop-shadow(0 18px 26px rgba(0,0,0,0.35))" } }, ghost);
+  const gT0 = 3.42, gEnter = 0.55;            // enters from the left, then joins the loop
+  const gcx = 520, gcy = 1000, gA = 360, gB = 250, gPer = 2.3; // lemniscate of Gerono: x = A sin θ, y = B sin 2θ
+  const gPath = (t) => {
+    const th = ((t - gT0) / gPer) * Math.PI * 2 - Math.PI * 0.5;
+    return { x: gcx + gA * Math.sin(th), y: gcy + gB * Math.sin(2 * th) };
+  };
   procs.push((t) => {
-    if (t < 3.4 || t > t1) return;
-    const k = clamp((t - 3.4) / 0.8, 0, 1);
-    ghost.style.translate = `0px ${(Math.sin((t - 3.4) * 5.2) * 14 * k).toFixed(2)}px`;
+    if (t < gT0 - 0.01 || t > t1) { ghost.style.visibility = "hidden"; return; }
+    ghost.style.visibility = "visible";
+    const pos = (tt) => {
+      const pp = gPath(tt);
+      const u = clamp((tt - gT0) / gEnter, 0, 1), e = 1 - Math.pow(1 - u, 3);
+      return { x: lerp(-GH, pp.x, e), y: lerp(pp.y + 60, pp.y, e) };
+    };
+    const p = pos(t), q = pos(t + 0.02), q0 = pos(t - 0.02);
+    const vx = q.x - q0.x;
+    const bob = Math.sin((t - gT0) * 11) * 10;       // flapping
+    const tilt = clamp(vx * 0.35, -16, 16) + Math.sin((t - gT0) * 7) * 5;
+    const flip = clamp(vx / 10, -1, 1);             // face the direction of travel (turns through 0 = a pirouette)
+    ghost.style.transform = `translate3d(${(p.x - GH / 2).toFixed(2)}px, ${(p.y - GH / 2 + bob).toFixed(2)}px, 0) rotate(${tilt.toFixed(2)}deg)`;
+    ghImg.style.transform = `scaleX(${(Math.sign(flip || 1) * Math.max(Math.abs(flip), 0.3)).toFixed(3)})`;
   });
 
   // ---------- pre-drop tension: everything vibrates & swells ----------

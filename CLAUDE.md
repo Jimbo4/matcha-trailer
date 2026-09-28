@@ -4,7 +4,7 @@ Leggi questo file per intero prima di toccare qualsiasi cosa. Contiene tutto que
 
 ## 1. Stato
 
-- Trailer verticale per Instagram (Reels, Storie, annunci), 1080x1920, 30 fps, 30 s. Consegnato il 27/09/2026.
+- Trailer verticale per Instagram (Reels, Storie, annunci), 1080x1920, 30 fps, 30 s. v6 consegnata il 27/09/2026, v7 il 28/09/2026 (modifiche nella sezione 13; la v6 è in `04_render/_v6`, fuori da git).
 - Master: `04_render/Matcha_trailer_30s_1080x1920.mp4`. Altri file finali in `04_render` (vedi `04_render/LEGGIMI.md`).
 - Script e storyboard definitivi: `01_script/script_storyboard_v2.md`.
 - Nel progetto Claude "20260926_matcha_CMO" c'è il riepilogo `claude/trailer_lancio_30s.md` (decisioni e contesto).
@@ -84,14 +84,15 @@ trailer/
     css/trailer.css     token colore, tipografia (.display, .wordmark), maschere delle righe, bolle chat, telefono
     js/core.js          tempi (oggetto T), timeline GSAP in pausa, helper, seek deterministico
     js/flowers.js       fiori del brand (6 forme) e transizioni "iride" a fiore
-    js/s1_chat.js       0-5,6 s: chat infinita, "3 settimane di chat / 0 appuntamenti / Romantico, eh?", fantasma
+    js/s1_chat.js       0-5,6 s: chat infinita, "3 settimane di chat / 0 appuntamenti / Romantico, eh?", emoji 🤔→😱, 👻 a otto
     js/s2_turn.js       5,6-7,5 s: drop, bolle che esplodono in fiori, "Le cose belle non succedono in chat."
     js/s3_live.js       S3 brindisi 7,5 s, S4 risata 9,4 s, S5 sguardo con fumetto 11,25 s
     js/s6_app.js        15-20,6 s: telefono con schermate reali dell'app, "Da un match..." / "Devi solo presentarti."
     js/s7_brand.js      20,6 s wordmark e tagline; 24,4 s CTA con badge App Store e Google Play
     js/main.js          modalità render, scossa di camera sui colpi, player di anteprima
     js/icons.js         icone Ionicons inline; gsap*.js e plugin GSAP 3.15
-    assets/img, svg     ritagli halftone, foto, icona, badge store
+    assets/img, svg     ritagli halftone, foto (date_spritz/date_bar da Pixabay), icona, badge store
+    assets/emoji        emoji Fluent Color SVG (🤔 😱 👻) + licenza MIT
     assets/audio/trailer_mix.m4a   audio dell'anteprima (lo rigenera build.sh audio)
     fonts/              Bricolage Grotesque, DM Sans, Fraunces (TTF variabili locali)
     pipeline/           render.mjs, shot.mjs, browser.mjs, build.sh, setup.sh, audio/, qc/, images/
@@ -106,11 +107,11 @@ Griglia musicale: 128 BPM, battuta 1,875 s. Colpi: DROP 5,625 s, JUMP 20,625 s, 
 |---|---|---|---|
 | 0-1,97 | S1 chat | 0,30 "Tre settimane di chat." | "3 settimane / di chat." visibile dal primo fotogramma; chat che scorre |
 | 1,97-3,52 | S1 | 1,95 "Zero appuntamenti." | "0 appuntamenti."; "Visualizzato" 3,05; "sta scrivendo" 3,2-4,25 |
-| 3,52-5,63 | S1 | 3,50 "Romantico, eh?" | fantasma 3,42; sorriso che diventa smorfia 3,46; tensione e tremolio 4,55-5,63 |
-| 5,63-7,5 | S2 svolta | 5,80 "Le cose belle non succedono in chat." | iride a fiore Menta; esplosione di fiori; "chat." barrato in rosa 7,02 |
+| 3,52-5,63 | S1 | 3,50 "Romantico, eh?" | emoji grande 🤔 in basso a destra da 0 s, diventa 😱 a 3,46; 👻 entra a 3,42 e vola a otto sulla chat fino al drop; tensione e tremolio 4,55-5,63 |
+| 5,63-7,5 | S2 svolta | 5,80 "Le cose belle non succedono in chat." | iride a fiore Menta; esplosione di fiori; "chat." senza barra (tolta nella v7, anche dalla copertina) |
 | 7,38-9,4 | S3 brindisi | 7,80 "Succedono al primo brindisi." | iride rosa; coppia halftone; scintilla del "cin" 8,99 |
 | 9,28-11,25 | S4 risata | 9,62 "In una risata che non ti aspettavi." | iride gialla a sole; polaroid "sabato, 19:00 · Milano" |
-| 11,15-15,0 | S5 sguardo | 11,50 "In uno sguardo che dice:" / 13,55 "restiamo ancora un po'." | foto a lume di candela; fumetto "Restiamo ancora un po'?" 13,45; spinta verso l'alto 14,98 |
+| 11,15-15,0 | S5 sguardo | 11,50 "In uno sguardo che dice:" / 13,55 "restiamo ancora un po'." | tre polaroid 11,33 / 11,95 / 12,57 (spritz · Isola, bancone · Navigli, vino a lume di candela · Brera); fumetto "Restiamo ancora un po'?" 13,45; spinta verso l'alto 14,98 |
 | 15,0-20,6 | S6 app | 15,55 "Da un match a un tavolo vero." / 18,95 "Devi solo presentarti." | "È un match!" 15; "Quando sei libero/a?" 16,85 con tap; "Appuntamento con Giulia" 18,62; zoom finale 19,18; uscita 20,25 |
 | 20,6-24,4 | S7 brand | 20,85 "Matcha." / 21,80 "Per te che vuoi uscire davvero." | flash bianco sul colpo; wordmark Fraunces Acqua; tagline 21,78 |
 | 24,3-30 | S8 CTA | (musica) | iride a festone Menta; icona, wordmark, tagline, "Scarica Matcha →", badge 26,2; impulso finale 28,13 |
@@ -144,6 +145,10 @@ Le posizioni esatte della voce (inizio e fine nella take, inizio nel trailer) so
 10. **Audio**: voce normalizzata a -17 LUFS (mono, quindi circa -14 in stereo), de-esser a banda divisa (`deess.py`: sibilanti da +2 a -3 dB rispetto alle vocali), musica a -19,5 LUFS con ducking di 6,5 dB sotto la voce, master a -14 LUFS con limiter true peak a -1,3 dBTP. Versione senza musica a -16 LUFS. Stems scritti con 4,5 dB di margine.
 11. **Riproducibilità**: con le versioni in `requirements.txt` il mix esce identico bit per bit; il render cambia di poco (PSNR circa 48 dB) solo per la codifica.
 
+12. **Telefono S6, bordo dello schermo**: le schermate dell'app in attesa (xPercent 100) o già coperte (-30) vanno nascoste (`visibility`), altrimenti il ritaglio arrotondato ruotato in 3D lascia filtrare 1 px del loro bianco (riga bianca che sfarfallava a 16 s nella v6). Lo schermo ha fondo scuro, l'app è scalata a 1232/847 per coprirlo tutto e un anello nero `.rim` fuori dal ritaglio copre le cuciture del bordo. Verifica: `node qc/frames.mjs ../index.html out/frames 15.8 17.8` (un PNG ogni 1/30 s) e confronto dei bordi tra fotogrammi consecutivi.
+13. **Emoji**: Fluent Color in SVG (nitide a qualsiasi dimensione). Le Fluent 3D esistono solo a 256 px, troppo piccole per 520 px. Le emoji Apple non si possono usare.
+14. **Badge store**: stessa altezza (118 px) e larghezze dal rapporto del viewBox di ciascun SVG, coppia centrata (`s7_brand.js`).
+
 ## 9. Runner API sul PC (voce, musica, download)
 
 - Serve perché la sandbox non raggiunge le API di AI. Avvio: doppio clic su `AVVIA_RUNNER.bat` (chiedilo a Jacopo). Stop: crea il file `tools/STOP` (il runner si ferma e lo cancella). Stato: `tools/heartbeat.txt` si aggiorna ogni 1,5 s.
@@ -158,7 +163,7 @@ Le posizioni esatte della voce (inizio e fine nella take, inizio nel trailer) so
   python3 tools/tts_decode.py 02_assets/_raw/tts_Leda_v4.json 02_assets/voice/takes/vo_Leda_v4.wav
   ```
 - Prompt TTS: parti da `02_assets/voice/prompt/tts_Leda_v3_con_cta.json` (profilo voce, note di regia, pronuncia). "Matcha" nel testo va scritto "Màccia" perché il modello lo pronunci come il tè. La take finale è `vo_Leda.wav` (prompt `tts_Leda_take_finale.json`), pronuncia verificata.
-- Limiti del piano gratuito Google: TTS 3 richieste al minuto e 10 al giorno; Lyria non disponibile (limite 0). L'account OpenAI è senza credito.
+- Limiti del piano gratuito Google: TTS 3 richieste al minuto e 10 al giorno; Lyria e tutti i modelli immagine (gemini-3.1-flash-image, 2.5-flash-image, 3-pro-image) non disponibili (limite 0, verificato il 28/09/2026). L'account OpenAI è senza credito.
 - Musica ed effetti Mixkit si scaricano con job `http` da assets.mixkit.co (URL nelle pagine salvate in `02_assets/_raw/web`).
 - Pubblicazione su GitHub (job `git_publish`): esegue sul PC `git init` (solo la prima volta), `git add -A`, `git commit`, imposta il remote e fa `git push -u origin main`, con le credenziali già salvate in Git per Windows. Il remote deve essere `https://github.com/Jimbo4/<repo>.git`.
   ```bash
@@ -172,6 +177,7 @@ Le posizioni esatte della voce (inizio e fine nella take, inizio nel trailer) so
 
 - I ritagli halftone (sfondo giallo uniforme, contorno bianco) vengono dalle immagini del brand in `202606_matcha/materials`. `python3 pipeline/images/keyer.py --all` li rigenera in `pipeline/images/out/` (la cartella materials deve stare accanto a `trailer`).
 - Interventi manuali fatti una volta sola: rimozione della filigrana Gemini da `1a.png` e `1b.png` (clonazione di una zona pulita, proteggendo il contorno bianco); allineamento della versione "smorfia" su quella "sorriso" con OpenCV (ORB + similarità) per lo scambio a 3,46 s (`woman_phone_cringe_aligned.png`).
+- Foto Pixabay (v7): `date_spritz.jpg` e `date_bar.jpg`, originali 1280 px in `02_assets/images/pixabay`. Pixabay blocca i download automatici con Cloudflare: si cerca con il browser integrato (lettura dei risultati via fetch nella pagina), poi si scaricano i file da cdn.pixabay.com con un job `http` del runner.
 - Foto: `toast_photo.jpg` (mission del sito), `bar_table.jpg` (hero), versioni sfocate `_blur`, `piazza.jpg`, profili `p_*.jpg`, `splash2.png` e `icon.png` dall'app.
 
 ## 11. Licenze e backup
@@ -183,3 +189,8 @@ Le posizioni esatte della voce (inizio e fine nella take, inizio nel trailer) so
 ## 12. Idee già proposte a Jacopo
 
 Taglio da 15 s, versione 4:5 per il feed, sottotitoli impressi, varianti per annunci.
+
+## 13. Cronologia versioni
+
+- **v6** (27/09/2026): prima consegna. File in `04_render/_v6`.
+- **v7** (28/09/2026): apertura con emoji Fluent 🤔 che diventa 😱 a 3,46 s (al posto della donna halftone) e 👻 che vola a otto (al posto di `ghost.png`); tolta la barra rosa su "chat." (trailer e copertina); in S5 tre polaroid di appuntamenti diversi prima del fumetto (al posto della foto con cornice spessa); fix della riga bianca sul bordo del telefono a 16 s; badge App Store e Google Play alla stessa altezza; due fruscii leggeri all'arrivo delle polaroid (`sfx_cues.json`); finestra di motion blur alta estesa a 3,40-6,35 s per il volo del fantasma.

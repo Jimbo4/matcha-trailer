@@ -1,5 +1,7 @@
 # Matcha, trailer di lancio: file finali
 
+Versione v7 del 28/09/2026 (emoji 🤔→😱 e 👻 nell'apertura, niente barra su "chat.", tre polaroid prima di "Restiamo ancora un po'?", bordo del telefono corretto, badge alla stessa altezza). La v6 del 27/09/2026 è in `_v6/` (fuori da git, resta nella storia della repo).
+
 | File | Uso |
 |---|---|
 | `Matcha_trailer_30s_1080x1920.mp4` | Versione finale con voce, musica ed effetti. Pronta per Reels, Storie e annunci. |

@@ -29,7 +29,7 @@ const CRF = +(args.crf || (DRAFT ? 20 : 15)), PRESET = DRAFT ? 'veryfast' : 'slo
 const AUDIO = args.audio ? path.resolve(args.audio) : null;
 // Finestre di movimento veloce (secondi): transizioni a fiore, esplosione al drop, push, uscita del telefono, flash.
 // Se cambi i tempi delle transizioni, aggiorna questa lista (o passala con --hi).
-const HI = (args.hi || '5.55-6.35,7.30-7.95,9.20-9.80,11.08-11.75,14.95-15.75,16.80-17.35,18.58-19.10,20.20-21.05,24.25-24.95')
+const HI = (args.hi || '3.40-6.35,7.30-7.95,9.20-9.80,11.08-11.75,14.95-15.75,16.80-17.35,18.58-19.10,20.20-21.05,24.25-24.95')
   .split(',').map((s) => s.split('-').map(Number));
 const sppAt = (t) => (HI.some(([a, b]) => t >= a && t < b) ? SPPHI : SPP);
 

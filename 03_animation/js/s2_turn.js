@@ -51,14 +51,8 @@
   });
 
   // ---------- headline ----------
-  const H = textBlock(S, ["Le cose belle", "non succedono", "in <span class='chatword' style='position:relative;display:inline-block'>chat.</span>"], { left: "80px", top: "700px", fontSize: "132px", color: "#222222" });
+  const H = textBlock(S, ["Le cose belle", "non succedono", "in chat."], { left: "80px", top: "700px", fontSize: "132px", color: "#222222" });
   revealLines(H.inners, t0 + 0.14, 0.11, 0.62);
-  // hand-drawn strike on "chat."
-  const cw = H.box.querySelector(".chatword");
-  const sv = svgEl("svg", { width: "360", height: "120", viewBox: "0 0 360 120", style: "position:absolute;left:-18px;top:28px;overflow:visible" });
-  cw.appendChild(sv);
-  const strike = svgEl("path", { d: "M8,74 C70,58 140,70 205,55 C255,44 300,52 346,40", fill: "none", stroke: "#FF5FC4", "stroke-width": "18", "stroke-linecap": "round" }, sv);
-  tl.fromTo(strike, { drawSVG: "0%" }, { drawSVG: "100%", duration: 0.32, ease: "power2.inOut" }, 7.02);
   // subtle push on the whole scene
   tl.fromTo(H.box, { scale: 1 }, { scale: 1.04, duration: 2.2, ease: "none", transformOrigin: "0% 50%" }, t0);
 
