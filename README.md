@@ -32,20 +32,6 @@ bash build.sh all      # audio, video (~15 min), copertina, controlli, copia in 
 
 ## Backup su GitHub
 
-Repo: https://github.com/Jimbo4/matcha-trailer (privata, branch `main`).
+Repo: https://github.com/Jimbo4/matcha-trailer (branch `main`).
 
-La repo deve restare **privata**: contiene musica ed effetti Mixkit (non si possono ridistribuire come file a sé) e materiali del brand. Il file `.gitignore` esclude già le chiavi (`_keys.env`), i dump delle chiamate API (`02_assets/_raw`), lo stato del runner, i file generati e la bozza superata. Restano fuori anche i brani candidati non usati (per includerli, vedi il commento nel `.gitignore`). Peso della repo: circa 145 MB in 139 file, nessuno sopra i 25 MB (sotto i limiti di GitHub, Git LFS non serve).
-
-Per salvare nuove modifiche, con GitHub Desktop (File > Add local repository > cartella `trailer`) oppure da terminale:
-
-```bash
-cd C:\Users\JacopoMarcolini\Desktop\workspace\202606_matcha\trailer
-git status          # controllo: non devono comparire _keys.env né 02_assets/_raw
-git add -A
-git commit -m "Descrizione della modifica"
-git push
-```
-
-Claude può farlo da solo con il job `git_publish` del runner (vedi `CLAUDE.md`, sezione 9).
-
-Per ripristinare su un altro computer: clonare la repo e ricreare `_keys.env` partendo da `_keys.env.example`.
+Il file `.gitignore` esclude già le chiavi (`_keys.env`), i dump delle chiamate API (`02_assets/_raw`), lo stato del runner, i file generati e la bozza superata. Restano fuori anche i brani candidati non usati (per includerli, vedi il commento nel `.gitignore`). Peso della repo: circa 145 MB in 139 file, nessuno sopra i 25 MB (sotto i limiti di GitHub, Git LFS non serve).
